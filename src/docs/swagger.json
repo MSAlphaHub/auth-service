@@ -1,0 +1,142 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Sample API",
+    "description": "API for managing resources",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Local development server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Resource Management",
+      "description": "Operations related to resources"
+    },
+    {
+      "name": "User Management",
+      "description": "Operations related to users"
+    }
+  ],
+  "paths": {
+    "/resource": {
+      "get": {
+        "summary": "Retrieve a list of resources",
+        "tags": ["Resource Management"],
+        "responses": {
+          "200": {
+            "description": "A list of resources",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Resource"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new resource",
+        "tags": ["Resource Management"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewResource"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Resource created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Resource"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "summary": "Retrieve a list of users",
+        "tags": ["User Management"],
+        "responses": {
+          "200": {
+            "description": "A list of users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Resource": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "123"
+          },
+          "name": {
+            "type": "string",
+            "example": "Sample Resource"
+          },
+          "description": {
+            "type": "string",
+            "example": "A sample resource"
+          }
+        }
+      },
+      "NewResource": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "New Resource"
+          },
+          "description": {
+            "type": "string",
+            "example": "Description of the new resource"
+          }
+        },
+        "required": ["name", "description"]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "username": {
+            "type": "string",
+            "example": "johndoe"
+          }
+        }
+      }
+    }
+  }
+}
