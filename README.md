@@ -33,5 +33,5 @@ The Auth System provides user authentication, authorization, email sending, and 
 ### Step 1: Clone the repository
 
 ```bash
-git clone git@github.com:vth20/auth-system.git
+git clone git@github.com:vth20/auth-service.git
 cd auth-system
