@@ -1,17 +1,34 @@
+import dotenv from "dotenv";
+
+// Load .env file
+dotenv.config();
+
 interface IConfig {
   DB_HOST: string;
-  DB_PORT: string;
+  DB_PORT: number;
   DB_USER: string;
   DB_NAME: string;
   DB_PASSWORD: string;
+  ENV: "DEV" | "PRODUCT";
+  PORT: number;
+}
+
+function getEnvVar(key: string, defaultValue?: string): string {
+  const value = process.env[key] || defaultValue;
+  if (!value) {
+    throw new Error(`Environment variable ${key} is missing`);
+  }
+  return value;
 }
 
 const config: IConfig = {
-  DB_HOST: "localhost",
-  DB_PORT: "5432",
-  DB_USER: "postgres",
-  DB_NAME: "postgres",
-  DB_PASSWORD: "password",
+  DB_HOST: getEnvVar("DB_HOST"),
+  DB_PORT: Number(process.env.DB_PORT) || 5432,
+  DB_USER: getEnvVar("DB_USER"),
+  DB_NAME: getEnvVar("DB_NAME"),
+  DB_PASSWORD: getEnvVar("DB_PASSWORD"),
+  ENV: (process.env.ENV as "DEV" | "PRODUCT") || "DEV",
+  PORT: Number(process.env.PORT) || 3000,
 };
 
 export default config;
