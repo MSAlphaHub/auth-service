@@ -21,6 +21,7 @@ class Database implements IDatabase {
 							port: config.DB_PORT,
 					},
 			});
+            console.log(`Connect database ${config.DB_NAME} at ${config.DB_HOST}:${config.DB_PORT}`)
     }
 
     public static getInstance(): Database {

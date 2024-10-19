@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-
+import { EnumEnvironment } from "../constants/enums";
 // Load .env file
 dotenv.config();
 
@@ -9,7 +9,7 @@ interface IConfig {
   DB_USER: string;
   DB_NAME: string;
   DB_PASSWORD: string;
-  ENV: "DEV" | "PRODUCT";
+  ENV: string | EnumEnvironment;
   PORT: number;
 }
 
@@ -27,7 +27,7 @@ const config: IConfig = {
   DB_USER: getEnvVar("DB_USER"),
   DB_NAME: getEnvVar("DB_NAME"),
   DB_PASSWORD: getEnvVar("DB_PASSWORD"),
-  ENV: (process.env.ENV as "DEV" | "PRODUCT") || "DEV",
+  ENV: process.env.ENV || EnumEnvironment.DEVELOPMENT,
   PORT: Number(process.env.PORT) || 3000,
 };
 

@@ -8,4 +8,4 @@ const catchAsync =
       .catch((err) => next(err));
   };
 
-module.exports = catchAsync;
+export default catchAsync;

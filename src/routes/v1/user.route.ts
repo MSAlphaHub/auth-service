@@ -1,6 +1,7 @@
 import express from 'express';
+import usersController from '../../controllers/users';
 const router = express.Router();
 
-router.get("/users", );
+router.get("/", usersController.findUserById);
 
 export default router;

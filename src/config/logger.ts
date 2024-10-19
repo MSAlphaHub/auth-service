@@ -1,5 +1,6 @@
 import winston from "winston";
 import config from "./index";
+import DailyRotateFile from 'winston-daily-rotate-file'
 
 interface IPrintfData {
   level: string;
@@ -12,6 +13,11 @@ const enumerateErrorFormat = winston.format((info) => {
     Object.assign(info, { message: info.stack });
   }
   return info;
+});
+
+// log only info
+const infoFilter = winston.format((info) => {
+  return info.level === "info" ? info : false;
 });
 
 const logger = winston.createLogger({
@@ -29,8 +35,25 @@ const logger = winston.createLogger({
     )
   ),
   transports: [
-    config.ENV === "DEV" &&
-      new winston.transports.File({ filename: "error.log", level: "error" }),
+    new DailyRotateFile({
+      level: "error",
+      dirname: "logs",
+      filename: "error-%DATE%.log",
+      datePattern: "YYYY-MM-DD",
+      zippedArchive: true,
+      maxSize: "20m",
+      maxFiles: "3d",
+    }),
+    new DailyRotateFile({
+      level: "info",
+      dirname: "logs",
+      filename: "info-%DATE%.log",
+      datePattern: "YYYY-MM-DD",
+      zippedArchive: true,
+      maxSize: "20m",
+      maxFiles: "3d",
+      format: winston.format.combine(infoFilter())
+    }),
     new winston.transports.Console({ stderrLevels: ["error"] }),
   ].filter(Boolean) as winston.transport[],
 });
