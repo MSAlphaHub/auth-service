@@ -1,27 +1,26 @@
-import express, { Express, Request, Response , Application } from 'express';
-import dotenv from 'dotenv';
-import swaggerUI from 'swagger-ui-express';
-import swaggerDocument from './docs/swagger.json'
-import router from 'express';
+import app from "./app";
+import http from "http";
+import config from "./config";
+import logger from "./config/logger";
+import { createExitHandler } from "./utils/errors/handler";
+const server = http.createServer(app);
 
-//For env File
-dotenv.config();
-
-const app: Application = express();
-const port = process.env.PORT || 3000;
-const route = router.Router();
-
-// Swagger
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument, {
-  explorer: true
-}));
-route.use('/api-docs', swaggerUI.serve);
-route.get('/api-docs', swaggerUI.setup(swaggerDocument));
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to Express & TypeScript Server');
+const port = config.PORT;
+server.listen(port, () => {
+  console.log(`Server is run at http://localhost:${port}`);
 });
 
-app.listen(port, () => {
-  console.log(`Server is Fire at http://localhost:${port}`);
+
+const unexpectedErrorHandler = (error: Error) => {
+  logger.error(error);
+  createExitHandler(server)();
+};
+process.on("uncaughtException", unexpectedErrorHandler.bind(this));
+process.on("unhandledRejection", unexpectedErrorHandler);
+
+process.on("SIGTERM", () => {
+  logger.info("SIGTERM received");
+  if (server) {
+    server.close();
+  }
 });
