@@ -1,1 +1,4 @@
-export enum EnumEnvironment {"DEVELOPMENT", "PRODUCTION"};
+export enum EnumEnvironment {
+  "DEVELOPMENT",
+  "PRODUCTION",
+}
