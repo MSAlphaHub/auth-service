@@ -1,22 +1,22 @@
 // user
 export interface IUser {
-  id: string; // UUID
+  id?: string; // UUID
   email: string;
-  user_name: string;
-  first_name?: string;
-  last_name?: string;
+  userName: string;
+  firstName?: string;
+  lastName?: string;
   status?: string;
-  date_of_birth?: Date;
+  dateOfBirth?: Date;
   phone?: string;
-  last_login_date?: Date;
-  is_deleted: boolean;
-  created_at: Date;
-  updated_at: Date;
+  lastLoginDate?: Date;
+  isDeleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 // user_auth_method
 export interface IUserAuthMethod {
-  id: string; // UUID
+  id?: string; // UUID
   user_id: string; // UUID
   auth_method: string;
   identifier: string;
@@ -29,7 +29,7 @@ export interface IUserAuthMethod {
 
 // user_refresh_tokens
 export interface IUserRefreshToken {
-  id: number; // INT (Auto Increment)
+  id?: number; // INT (Auto Increment)
   user_id: string; // UUID
   token: string;
   expiry_timestamp: Date;
@@ -39,7 +39,7 @@ export interface IUserRefreshToken {
 
 // roles
 export interface IRole {
-  id: string; // UUID
+  id?: string; // UUID
   name?: string;
   is_disable: boolean;
   is_deleted: boolean;
@@ -51,7 +51,7 @@ export interface IRole {
 
 // resources
 export interface IResource {
-  id: string; // UUID
+  id?: string; // UUID
   name?: string;
   key?: string;
   description?: string;
@@ -64,7 +64,7 @@ export interface IResource {
 
 // permissions
 export interface IPermission {
-  id: string; // UUID
+  id?: string; // UUID
   resource_id: string; // UUID
   name?: string;
   key?: string;
@@ -78,7 +78,7 @@ export interface IPermission {
 
 // role_permissions
 export interface IRolePermission {
-  role_id: string; // UUID
+  role_id?: string; // UUID
   permission_id: string; // UUID
   is_deleted: boolean;
   create_by?: string;
