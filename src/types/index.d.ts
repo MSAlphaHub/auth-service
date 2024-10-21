@@ -1,3 +1,5 @@
+import { Moment, Date } from "moment";
+
 // user
 export interface IUser {
   id?: string; // UUID
@@ -85,4 +87,35 @@ export interface IRolePermission {
   created_at: Date;
   update_by?: string;
   updated_at: Date;
+}
+
+export interface ICreateToken {
+  token: string;
+  userId: UUID;
+  expires: Date;
+  type: TokenTypes;
+  blacklisted: boolean;
+}
+
+export interface IJwtPayload {
+  sub: UUID; // user ID
+  iat?: number; // issued at timestamp
+  exp?: number; // expiration timestamp
+  type: TokenTypes; // token type
+  [key: string]: any; // other possible custom claims
+}
+
+export interface IToken {
+  id: UUID;
+  userId: UUID;
+  token: string;
+  type: TokenTypes;
+  expires: Date;
+  blacklisted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface IUserAuthToken {
+  id: UUID;
 }

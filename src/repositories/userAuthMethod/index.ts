@@ -1,0 +1,6 @@
+
+class UserAuthMethod {
+	async register () {
+		
+	}
+}

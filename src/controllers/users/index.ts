@@ -1,6 +1,6 @@
 import { pick } from "./../../utils/index";
 import { UUID } from "crypto";
-import userService from "../../services/user";
+import userService from "../../services/users";
 import { Request, Response } from "express";
 import catchAsync from "../../utils/errors/catchAsync";
 import httpStatus from "http-status-codes";

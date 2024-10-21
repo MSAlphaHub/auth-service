@@ -6,12 +6,18 @@ import httpStatus from "http-status-codes";
 import routes from "./routes/v1";
 import ApiError from "./utils/errors/ApiError";
 import { errorConverter, errorHandler } from "./middlewares/error";
+import passport from "passport";
+import jwtStrategy from "./config/passport";
 
 const app: Application = express();
 const router = express.Router();
 
 // middleware parse json in body
 app.use(express.json({ limit: "100mb" }));
+
+// :: JWT AUTH :: //
+app.use(passport.initialize());
+passport.use("jwt", jwtStrategy);
 
 // Swagger
 app.use(

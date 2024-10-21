@@ -11,7 +11,7 @@ class UserService {
     return usersRepository.findUserById(id);
   }
 
-  async createUser(user: Partial<IUser>) {
+  async createUser(user: Partial<IUser>): Promise<IUser> {
     return usersRepository.createUser(user);
   }
 }
