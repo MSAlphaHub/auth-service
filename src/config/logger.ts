@@ -1,6 +1,7 @@
 import winston from "winston";
 import config from "./index";
-import DailyRotateFile from 'winston-daily-rotate-file'
+import DailyRotateFile from "winston-daily-rotate-file";
+import { EnumEnvironment } from "../constants/enums";
 
 interface IPrintfData {
   level: string;
@@ -21,10 +22,10 @@ const infoFilter = winston.format((info) => {
 });
 
 const logger = winston.createLogger({
-  level: config.ENV === "DEV" ? "debug" : "info",
+  level: config.env === EnumEnvironment.DEVELOPMENT ? "debug" : "info",
   format: winston.format.combine(
     enumerateErrorFormat(),
-    config.ENV === "DEV"
+    config.env === EnumEnvironment.DEVELOPMENT
       ? winston.format.colorize()
       : winston.format.uncolorize(),
     winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
@@ -52,7 +53,7 @@ const logger = winston.createLogger({
       zippedArchive: true,
       maxSize: "20m",
       maxFiles: "3d",
-      format: winston.format.combine(infoFilter())
+      format: winston.format.combine(infoFilter()),
     }),
     new winston.transports.Console({ stderrLevels: ["error"] }),
   ].filter(Boolean) as winston.transport[],

@@ -29,7 +29,7 @@ const errorHandler = (
   next: NextFunction
 ) => {
   let { statusCode, message } = err;
-  if (config.ENV === EnumEnvironment.PRODUCTION && !err.isOperational) {
+  if (config.env === EnumEnvironment.PRODUCTION && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     message = httpStatus.getStatusText(httpStatus.INTERNAL_SERVER_ERROR);
   }
@@ -39,10 +39,10 @@ const errorHandler = (
   const response = {
     code: statusCode,
     message,
-    ...(config.ENV === EnumEnvironment.DEVELOPMENT && { stack: err.stack }),
+    ...(config.env === EnumEnvironment.DEVELOPMENT && { stack: err.stack }),
   };
 
-  if (config.ENV === EnumEnvironment.DEVELOPMENT) {
+  if (config.env === EnumEnvironment.DEVELOPMENT) {
     logger.error(err);
   }
 

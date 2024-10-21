@@ -21,7 +21,7 @@ class UserRepository {
     return db.getConnection()("users").where({ id }).first();
   }
 
-  async createUser(user: Partial<IUser>) {
+  async createUser(user: Partial<IUser>): Promise<IUser> {
     return db
       .getConnection()("users")
       .insert({

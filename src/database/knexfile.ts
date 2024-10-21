@@ -4,11 +4,11 @@ export default {
   development: {
     client: "pg",
     connection: {
-      host: config.DB_HOST,
-      user: config.DB_USER,
-      password: config.DB_PASSWORD,
-      database: config.DB_NAME,
-      port: config.DB_PORT,
+      host: config.database.host,
+      user: config.database.user,
+      password: config.database.password,
+      database: config.database.name,
+      port: config.database.port,
     },
     migrations: {
       directory: "./migrations",

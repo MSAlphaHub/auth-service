@@ -1,40 +1,42 @@
-import knex, { Knex } from 'knex';
-import config from '../config';
+import knex, { Knex } from "knex";
+import config from "../config";
 
 interface IDatabase {
-    connection: Knex;
-    getConnection(): Knex;
+  connection: Knex;
+  getConnection(): Knex;
 }
 
 class Database implements IDatabase {
-    private static instance: Database;
-    public connection: Knex;
+  private static instance: Database;
+  public connection: Knex;
 
-    private constructor() {
-        this.connection = knex({
-					client: 'pg',
-					connection: {
-							host: config.DB_HOST,
-							user: config.DB_USER,
-							password: config.DB_PASSWORD,
-							database: config.DB_NAME,
-							port: config.DB_PORT,
-					},
-			});
-            console.log(`Connect database ${config.DB_NAME} at ${config.DB_HOST}:${config.DB_PORT}`)
+  private constructor() {
+    this.connection = knex({
+      client: "pg",
+      connection: {
+        host: config.database.host,
+        user: config.database.user,
+        password: config.database.password,
+        database: config.database.name,
+        port: config.database.port,
+      },
+    });
+    console.log(
+      `Connect database ${config.database.name} at ${config.database.host}:${config.database.port}`
+    );
+  }
+
+  public static getInstance(): Database {
+    if (!Database.instance) {
+      Database.instance = new Database();
     }
 
-    public static getInstance(): Database {
-        if (!Database.instance) {
-            Database.instance = new Database();
-        }
+    return Database.instance;
+  }
 
-        return Database.instance;
-    }
-
-    public getConnection(): Knex {
-        return this.connection;
-    }
+  public getConnection(): Knex {
+    return this.connection;
+  }
 }
 
 const instance = Database.getInstance();
