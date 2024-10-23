@@ -10,10 +10,5 @@ router.get(
   validate(userValidations.getUserById),
   usersController.findUserById
 );
-router.post(
-  "/create",
-  validate(userValidations.create),
-  usersController.createUser
-);
 
 export default router;

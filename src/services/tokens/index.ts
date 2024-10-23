@@ -1,16 +1,11 @@
+import { UUID } from "crypto";
+import jwt from "jsonwebtoken";
 import moment, { Moment } from "moment";
 import config from "../../config";
 import { TokenTypes } from "../../constants/enums";
-import { UUID } from "crypto";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import {
-  ICreateToken,
-  IJwtPayload,
-  IToken,
-  IUser,
-  IUserAuthToken,
-} from "../../types";
 import TokensRepository from "../../repositories/tokens";
+import { IJwtPayload, IToken, IUserAuthToken } from "../../types";
+import { Knex } from "knex";
 
 class TokenService {
   /**
@@ -50,14 +45,16 @@ class TokenService {
     userId: UUID,
     expires: Moment,
     type: TokenTypes,
+    trx?: Knex.Transaction,
     blacklisted: boolean = false
   ): Promise<IToken> => {
     return await TokensRepository.createToken({
       token,
       userId,
-      expires: expires.toDate(),
+      expires,
       type,
       blacklisted,
+      trx,
     });
   };
 
@@ -83,7 +80,7 @@ class TokenService {
     return tokenDoc;
   };
 
-  generateAuthTokens = async (user: IUserAuthToken) => {
+  generateAuthTokens = async (user: IUserAuthToken, trx?: Knex.Transaction) => {
     const accessTokenExpires = moment().add(
       config.jwt.accessExpirationMinutes,
       "minutes"
@@ -107,7 +104,8 @@ class TokenService {
       refreshToken,
       user.id,
       refreshTokenExpires,
-      TokenTypes.REFRESH_TOKEN
+      TokenTypes.REFRESH_TOKEN,
+      trx
     );
 
     return {

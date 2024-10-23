@@ -39,6 +39,8 @@ interface IEnv {
   ENV: EnumEnvironment;
   PORT: number;
   JWT_SECRET: string;
+  JWT_ACCESS_EXPIRATION_MINUTES: number;
+  JWT_REFRESH_EXPIRATION_DAYS: number;
 }
 
 export const validateEnv = (): IEnv => {

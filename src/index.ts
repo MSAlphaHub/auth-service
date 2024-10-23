@@ -15,7 +15,8 @@ const unexpectedErrorHandler = (error: Error) => {
   logger.error(error);
   createExitHandler(server)();
 };
-process.on("uncaughtException", unexpectedErrorHandler.bind(this));
+
+process.on("uncaughtException", unexpectedErrorHandler);
 process.on("unhandledRejection", unexpectedErrorHandler);
 
 process.on("SIGTERM", () => {

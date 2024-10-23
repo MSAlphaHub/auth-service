@@ -43,8 +43,8 @@ const config: IConfig = {
   port: env.PORT || 3000,
   jwt: {
     secret: env.JWT_SECRET,
-    accessExpirationMinutes: 0,
-    refreshExpirationDays: 0,
+    accessExpirationMinutes: env.JWT_ACCESS_EXPIRATION_MINUTES,
+    refreshExpirationDays: env.JWT_REFRESH_EXPIRATION_DAYS,
     resetPasswordExpirationMinutes: 0
   }
 };

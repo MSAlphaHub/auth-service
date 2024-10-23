@@ -20,4 +20,9 @@ const create = {
   }),
 };
 
-export default { getUserById, create };
+const loginWithEmailAndPassword = {
+  email: Joi.string().required().email(),
+  password: Joi.string().required().custom(password),
+};
+
+export default { getUserById, create, loginWithEmailAndPassword };

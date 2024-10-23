@@ -1,9 +1,18 @@
 export enum EnumEnvironment {
-  "DEVELOPMENT",
-  "PRODUCTION",
+  DEVELOPMENT = "DEVELOPMENT",
+  PRODUCTION = "PRODUCTION",
 }
 
 export enum TokenTypes {
-  "ACCESS_TOKEN",
-  "REFRESH_TOKEN",
+  ACCESS_TOKEN = "ACCESS_TOKEN",
+  REFRESH_TOKEN = "REFRESH_TOKEN",
+}
+
+export enum UserAuthMethod {
+  EMAIL_PASSWORD = "EMAIL_PASSWORD",
+  BIOMETRIC = "BIOMETRIC",
+  FACEBOOK = "FACEBOOK",
+  GOOGLE = "GOOGLE",
+  GITHUB = "GITHUB",
+  APPLE = "APPLE",
 }
