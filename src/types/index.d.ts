@@ -1,3 +1,6 @@
+import { password } from "./../validations/common/index";
+import { IUserAuthMethod } from "./index.d";
+import { Knex } from "knex";
 import { Moment, Date } from "moment";
 
 // user
@@ -95,6 +98,7 @@ export interface ICreateToken {
   expires: Date;
   type: TokenTypes;
   blacklisted: boolean;
+  trx?: Knex.Transaction;
 }
 
 export interface IJwtPayload {
@@ -118,4 +122,13 @@ export interface IToken {
 
 export interface IUserAuthToken {
   id: UUID;
+}
+
+export interface IUserRegister extends IUser {
+  password: string;
+}
+
+export interface IUserLoginWithEmailAndPassword {
+  email: string;
+  password: string;
 }

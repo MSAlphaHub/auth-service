@@ -11,26 +11,48 @@ class TokensRepository {
     type,
     expires,
     blacklisted,
+    trx,
   }: Partial<ICreateToken>): Promise<IToken> {
-    return db
-      .getConnection()("tokens")
-      .insert({
-        user_id: userId,
-        token,
-        type,
-        expires_at: expires.toDate(),
-        blacklisted,
-      })
-      .returning([
-        "id",
-        "user_id",
-        "token",
-        "type",
-        "expires_at",
-        "blacklisted",
-        "created_at",
-        "updated_at",
-      ]);
+    return trx
+      ? db
+          .getConnection()("tokens")
+          .transacting(trx)
+          .insert({
+            user_id: userId,
+            token,
+            type,
+            expires_at: expires.toDate(),
+            blacklisted,
+          })
+          .returning([
+            "id",
+            "user_id",
+            "token",
+            "type",
+            "expires_at",
+            "blacklisted",
+            "created_at",
+            "updated_at",
+          ])
+      : db
+          .getConnection()("tokens")
+          .insert({
+            user_id: userId,
+            token,
+            type,
+            expires_at: expires.toDate(),
+            blacklisted,
+          })
+          .returning([
+            "id",
+            "user_id",
+            "token",
+            "type",
+            "expires_at",
+            "blacklisted",
+            "created_at",
+            "updated_at",
+          ]);
   }
 
   async getToken(

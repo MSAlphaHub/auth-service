@@ -4,11 +4,11 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.raw('CREATE EXTENSION IF NOT EXISTS "uuid-ossp"')
     .createTable("users", function (table) {
       table.uuid("id").primary().defaultTo(knex.raw("uuid_generate_v4()"));
-      table.string("email", 255).unique();
-      table.string("user_name", 255);
+      table.string("email", 255).unique().notNullable();
+      table.string("user_name", 255).notNullable();
       table.string("first_name", 255);
       table.string("last_name", 255);
-      table.string("status", 50);
+      table.string("status", 50).notNullable();
       table.dateTime("date_of_birth");
       table.string("phone", 10);
       table.dateTime("last_login_date");

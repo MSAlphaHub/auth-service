@@ -21,9 +21,21 @@ class Database implements IDatabase {
         port: config.database.port,
       },
     });
-    console.log(
-      `Connect database ${config.database.name} at ${config.database.host}:${config.database.port}`
-    );
+
+    // check connection is established
+    this.connection
+      .raw("SELECT 1")
+      .then(() => {
+        console.log(
+          `Connected to database ${config.database.name} at ${config.database.host}:${config.database.port}`
+        );
+      })
+      .catch((error) => {
+        console.error("Unable to connect to the database:", error.message);
+        throw new Error(
+          "Database connection failed. Please check the configuration and database."
+        );
+      });
   }
 
   public static getInstance(): Database {
