@@ -5,17 +5,15 @@ import { Knex } from "knex";
 
 class UserRepository {
   async finAllUsers() {
-    return db
-      .getConnection()("users")
-      .select(
-        "id",
-        "user_name",
-        "first_name",
-        "last_name",
-        "date_of_birth",
-        "phone",
-        "status"
-      );
+    return db.getConnection()("users").select({
+      id: "id",
+      userName: "user_name",
+      firstName: "first_name",
+      lastName: "last_name",
+      dateOfBirth: "date_of_birth",
+      phone: "phone",
+      status: "status",
+    });
   }
 
   async findUserById(id: UUID) {
@@ -45,10 +43,10 @@ class UserRepository {
           })
           .returning([
             "id",
-            "user_name",
-            "first_name",
-            "last_name",
-            "date_of_birth",
+            "user_name AS userName",
+            "first_name AS firstName",
+            "last_name AS lastName",
+            "date_of_birth AS dateOfBirth",
             "phone",
             "status",
           ])
@@ -66,10 +64,10 @@ class UserRepository {
           })
           .returning([
             "id",
-            "user_name",
-            "first_name",
-            "last_name",
-            "date_of_birth",
+            "user_name AS userName",
+            "first_name AS firstName",
+            "last_name AS lastName",
+            "date_of_birth AS dateOfBirth",
             "phone",
             "status",
           ])

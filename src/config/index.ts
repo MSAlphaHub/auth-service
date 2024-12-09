@@ -24,11 +24,16 @@ interface IJwt {
   refreshExpirationDays: number,
   resetPasswordExpirationMinutes: number,
 }
+
+interface IQueues {
+  emailQueue: string;
+}
 interface IConfig {
   database: IDatabase;
   env: EnumEnvironment;
   port: number;
   jwt: IJwt;
+  queues: IQueues;
 }
 
 const config: IConfig = {
@@ -46,6 +51,9 @@ const config: IConfig = {
     accessExpirationMinutes: env.JWT_ACCESS_EXPIRATION_MINUTES,
     refreshExpirationDays: env.JWT_REFRESH_EXPIRATION_DAYS,
     resetPasswordExpirationMinutes: 0
+  },
+  queues: {
+    emailQueue: env.EMAIL_QUEUE_ADDRESS
   }
 };
 

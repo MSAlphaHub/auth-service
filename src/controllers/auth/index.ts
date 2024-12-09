@@ -1,9 +1,10 @@
 import { Request, Response } from "express";
-import catchAsync from "../../utils/errors/catchAsync";
+import httpStatus from "http-status-codes";
+import { UserAuthMethod } from "../../constants/enums";
+import db from "../../database";
+import userAuthMethodRepository from "../../repositories/userAuthMethod";
 import userRepository from "../../repositories/users";
 import tokenService from "../../services/tokens";
-import httpStatus from "http-status-codes";
-import apiResponse from "../../utils/api/response";
 import userAuthMethodService from "../../services/userAuthMethod";
 import {
   IUserAuthMethod,
@@ -11,11 +12,10 @@ import {
   IUserLoginWithEmailAndPassword,
   IUserRegister,
 } from "../../types";
-import db from "../../database";
-import { comparePassword, hashPassword } from "../../utils/auth";
-import userAuthMethodRepository from "../../repositories/userAuthMethod";
-import { UserAuthMethod } from "../../constants/enums";
-import ApiError from "../../utils/errors/ApiError";
+import apiResponse from "../../utils/api/response";
+import { hashPassword } from "../../utils/auth";
+import catchAsync from "../../utils/errors/catchAsync";
+import { publishMessageVerifyEmail } from "../../queues/producer";
 class AuthController {
   register = catchAsync(async (req: Request, res: Response) => {
     const trx = await db.getConnection().transaction();
@@ -39,8 +39,14 @@ class AuthController {
 
       // Create token
       const tokens = await tokenService.generateAuthTokens(user, trx);
-      // const verifyEmailToken = await tokenService.generateVerifyEmailToken(user);
-      // await emailService.sendVerificationEmail(user.email, user.name, verifyEmailToken);
+
+      // Handle send message verify email
+      await publishMessageVerifyEmail({
+        email: payload.email,
+        username: payload.userName,
+        verificationLink: "",
+      });
+
       trx.commit();
       return apiResponse.success(
         res,

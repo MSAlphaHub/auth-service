@@ -27,6 +27,9 @@ const env = Joi.object()
     EMAIL_FROM: Joi.string().description(
       "the from field in the emails sent by the app"
     ),
+    EMAIL_QUEUE_ADDRESS: Joi.string().description(
+      "the queues's address connect to rabbitMQ Email service"
+    ),
   })
   .unknown();
 
@@ -41,6 +44,7 @@ interface IEnv {
   JWT_SECRET: string;
   JWT_ACCESS_EXPIRATION_MINUTES: number;
   JWT_REFRESH_EXPIRATION_DAYS: number;
+  EMAIL_QUEUE_ADDRESS: string;
 }
 
 export const validateEnv = (): IEnv => {

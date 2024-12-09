@@ -7,72 +7,25 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api",
+      "url": "http://localhost:3000/api/v1",
       "description": "Local development server"
     }
   ],
   "tags": [
     {
-      "name": "Resource Management",
-      "description": "Operations related to resources"
+      "name": "User Controller",
+      "description": "The User Controller is responsible for managing user-related operations within the application."
     },
     {
-      "name": "User Management",
-      "description": "Operations related to users"
+      "name": "Auth Controller",
+      "description": "The Auth Controller is dedicated to handling authentication and authorization operations for users within the application."
     }
   ],
   "paths": {
-    "/resource": {
-      "get": {
-        "summary": "Retrieve a list of resources",
-        "tags": ["Resource Management"],
-        "responses": {
-          "200": {
-            "description": "A list of resources",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Resource"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "summary": "Create a new resource",
-        "tags": ["Resource Management"],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewResource"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Resource created successfully",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Resource"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user": {
+    "/users": {
       "get": {
         "summary": "Retrieve a list of users",
-        "tags": ["User Management"],
+        "tags": ["User Controller"],
         "responses": {
           "200": {
             "description": "A list of users",
@@ -81,7 +34,53 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/Users"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Retrieve a specific user by ID",
+        "tags": ["User Controller"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the user to retrieve",
+            "schema": {
+              "type": "string",
+              "example": "d4eeecd5-bb4d-4b5f-9617-08387435052c"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
                   }
                 }
               }
@@ -93,47 +92,43 @@
   },
   "components": {
     "schemas": {
-      "Resource": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "123"
-          },
-          "name": {
-            "type": "string",
-            "example": "Sample Resource"
-          },
-          "description": {
-            "type": "string",
-            "example": "A sample resource"
-          }
+      "Users": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/User"
         }
-      },
-      "NewResource": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "example": "New Resource"
-          },
-          "description": {
-            "type": "string",
-            "example": "Description of the new resource"
-          }
-        },
-        "required": ["name", "description"]
       },
       "User": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "example": "1"
+            "example": "d4eeecd5-bb4d-4b5f-9617-08387435052c"
           },
-          "username": {
+          "user_name": {
             "type": "string",
             "example": "johndoe"
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "last_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "date_of_birth": {
+            "type": "string",
+            "format": "date",
+            "example": "1990-01-01"
+          },
+          "phone": {
+            "type": "string",
+            "example": "1234567890"
+          },
+          "status": {
+            "type": "string",
+            "example": "active"
           }
         }
       }
