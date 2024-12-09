@@ -3,6 +3,7 @@ import http from "http";
 import config from "./config";
 import logger from "./config/logger";
 import { createExitHandler } from "./utils/errors/handler";
+import rabbitMQ from "./queues"
 const server = http.createServer(app);
 
 const port = config.port;
@@ -23,5 +24,6 @@ process.on("SIGTERM", () => {
   logger.info("SIGTERM received");
   if (server) {
     server.close();
+    rabbitMQ.close()
   }
 });
