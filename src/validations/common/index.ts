@@ -10,6 +10,7 @@ const env = Joi.object()
     DB_NAME: Joi.string().required(),
     DB_PASSWORD: Joi.string().required(),
     PORT: Joi.number().default(3000),
+    HOST: Joi.string().default("http://localhost:3000/api"),
     JWT_SECRET: Joi.string().required().description("JWT secret key"),
     JWT_ACCESS_EXPIRATION_MINUTES: Joi.number()
       .default(30)
@@ -18,7 +19,7 @@ const env = Joi.object()
       .default(30)
       .description("days after which refresh tokens expire"),
     JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: Joi.number()
-      .default(10)
+      .default(30)
       .description("minutes after which verify email token expires"),
     SMTP_HOST: Joi.string().description("server that will send the emails"),
     SMTP_PORT: Joi.number().description("port to connect to the email server"),
@@ -41,8 +42,10 @@ interface IEnv {
   DB_PASSWORD: string;
   ENV: EnumEnvironment;
   PORT: number;
+  HOST: string;
   JWT_SECRET: string;
   JWT_ACCESS_EXPIRATION_MINUTES: number;
+  JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: number;
   JWT_REFRESH_EXPIRATION_DAYS: number;
   EMAIL_QUEUE_ADDRESS: string;
 }

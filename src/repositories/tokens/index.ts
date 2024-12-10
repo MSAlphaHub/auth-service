@@ -5,7 +5,7 @@ import { TokenTypes } from "../../constants/enums";
 import { UUID } from "crypto";
 
 class TokensRepository {
-  async createToken({
+  static async createToken({
     userId: userId,
     token,
     type,
@@ -55,22 +55,46 @@ class TokensRepository {
           ]);
   }
 
-  async getToken(
+  static async getToken(
     token: string,
     type: TokenTypes,
     userId: UUID,
-    blacklisted = false
+    blacklisted?: boolean
   ): Promise<IToken> {
     return db
       .getConnection()("tokens")
-      .select("*")
+      .select({
+        id: "id",
+        userId: "user_id",
+        token: "token",
+        type: "type",
+        blacklisted: "blacklisted",
+        expiresAt: "expires_at",
+        createdAt: "created_at",
+        updatedAt: "updated_at",
+      })
       .where({ token, type, user_id: userId, blacklisted })
       .first();
   }
 
-  async setTokenIsBlacklisted(token: string) {
+  static async setTokenIsBlacklisted(token: string) {
     db.getConnection()("tokens").update({ blacklisted: true }).where({ token });
+  }
+
+  static async checkTokenIsBlacklisted(
+    token: string,
+    type: TokenTypes,
+    userId: UUID
+  ): Promise<boolean> {
+    return (await this.getToken(token, type, userId, true)) != null;
+  }
+
+  static async setTokenToBlacklisted(token: string, type: TokenTypes) {
+    await db
+      .getConnection()("tokens")
+      .where({ token, type })
+      .update({ blacklisted: true });
   }
 }
 
-export default new TokensRepository();
+export default TokensRepository;

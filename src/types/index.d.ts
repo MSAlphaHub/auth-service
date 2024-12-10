@@ -136,5 +136,5 @@ export interface IUserLoginWithEmailAndPassword {
 export interface IPayloadVerifyEmail {
   email: string;
   username: string;
-  verificationLink: string;
+  verificationToken: string;
 }

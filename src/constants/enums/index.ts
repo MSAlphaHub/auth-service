@@ -6,6 +6,7 @@ export enum EnumEnvironment {
 export enum TokenTypes {
   ACCESS_TOKEN = "ACCESS_TOKEN",
   REFRESH_TOKEN = "REFRESH_TOKEN",
+  VERIFY_EMAIL_TOKEN = "VERIFY_EMAIL_TOKEN",
 }
 
 export enum UserAuthMethod {
@@ -15,4 +16,11 @@ export enum UserAuthMethod {
   GOOGLE = "GOOGLE",
   GITHUB = "GITHUB",
   APPLE = "APPLE",
+}
+
+export enum UserStatus {
+  PENDING = "PENDING",
+  ACTIVE = "ACTIVE",
+  SUSPENDED = "SUSPENDED", // User temporarily locked
+  DEACTIVATED = "DEACTIVATED",
 }

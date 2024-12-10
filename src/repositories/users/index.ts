@@ -2,9 +2,10 @@ import db from "../../database";
 import { UUID } from "crypto";
 import { IUser } from "../../types";
 import { Knex } from "knex";
+import { UserStatus } from "../../constants";
 
 class UserRepository {
-  async finAllUsers() {
+  static async finAllUsers() {
     return db.getConnection()("users").select({
       id: "id",
       userName: "user_name",
@@ -16,15 +17,22 @@ class UserRepository {
     });
   }
 
-  async findUserById(id: UUID) {
+  static async findUserById(id: UUID) {
     return db.getConnection()("users").where({ id }).first();
   }
 
-  async findUserByEmail(email: string) {
+  static async findUserByEmail(email: string) {
     return db.getConnection()("users").where({ email }).first();
   }
 
-  async createUser(
+  static async isExistByEmailAndPending(email: string): Promise<boolean> {
+    return db
+      .getConnection()("users")
+      .where({ email, status: UserStatus.PENDING })
+      .first();
+  }
+
+  static async createUser(
     user: Partial<IUser>,
     trx?: Knex.Transaction
   ): Promise<IUser> {
@@ -39,7 +47,7 @@ class UserRepository {
             last_name: user.lastName,
             date_of_birth: user.dateOfBirth,
             phone: user.phone,
-            status: "ACTIVE",
+            status: UserStatus.PENDING,
           })
           .returning([
             "id",
@@ -60,7 +68,7 @@ class UserRepository {
             last_name: user.lastName,
             date_of_birth: user.dateOfBirth,
             phone: user.phone,
-            status: "ACTIVE",
+            status: UserStatus.PENDING,
           })
           .returning([
             "id",
@@ -73,6 +81,20 @@ class UserRepository {
           ])
           .then((rows) => rows[0]);
   }
+
+  static async updateUserStatus(
+    userId: string,
+    status: UserStatus,
+    trx?: Knex.Transaction
+  ) {
+    return trx
+      ? db
+          .getConnection()("users")
+          .transacting(trx)
+          .where({ id: userId })
+          .update({ status })
+      : db.getConnection()("users").where({ id: userId }).update({ status });
+  }
 }
 
-export default new UserRepository();
+export default UserRepository;

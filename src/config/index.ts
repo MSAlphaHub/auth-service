@@ -1,4 +1,4 @@
-import { password } from './../validations/common/index';
+import { password } from "./../validations/common/index";
 import path from "path";
 import dotenv from "dotenv";
 import dotenvExpand from "dotenv-expand";
@@ -11,18 +11,19 @@ dotenvExpand.expand(expand);
 const env = validateEnv();
 
 interface IDatabase {
-  host: string,
-  port: number,
-  user: string,
-  password: string,
-  name: string,
+  host: string;
+  port: number;
+  user: string;
+  password: string;
+  name: string;
 }
 
 interface IJwt {
-  secret: string,
-  accessExpirationMinutes: number,
-  refreshExpirationDays: number,
-  resetPasswordExpirationMinutes: number,
+  secret: string;
+  accessExpirationMinutes: number;
+  refreshExpirationDays: number;
+  resetPasswordExpirationMinutes: number;
+  verifyEmailExpirationMinutes: number;
 }
 
 interface IQueues {
@@ -32,6 +33,7 @@ interface IConfig {
   database: IDatabase;
   env: EnumEnvironment;
   port: number;
+  host: string;
   jwt: IJwt;
   queues: IQueues;
 }
@@ -46,15 +48,17 @@ const config: IConfig = {
   },
   env: env.ENV || EnumEnvironment.DEVELOPMENT,
   port: env.PORT || 3000,
+  host: env.HOST,
   jwt: {
     secret: env.JWT_SECRET,
     accessExpirationMinutes: env.JWT_ACCESS_EXPIRATION_MINUTES,
     refreshExpirationDays: env.JWT_REFRESH_EXPIRATION_DAYS,
-    resetPasswordExpirationMinutes: 0
+    resetPasswordExpirationMinutes: 0,
+    verifyEmailExpirationMinutes: env.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
   },
   queues: {
-    emailQueue: env.EMAIL_QUEUE_ADDRESS
-  }
+    emailQueue: env.EMAIL_QUEUE_ADDRESS,
+  },
 };
 
 export default config;
