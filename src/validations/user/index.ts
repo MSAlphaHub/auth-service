@@ -25,4 +25,10 @@ const loginWithEmailAndPassword = {
   password: Joi.string().required().custom(password),
 };
 
-export default { getUserById, create, loginWithEmailAndPassword };
+const verifyEmailByToken = {
+  query: Joi.object().keys({
+    token: Joi.string().required(),
+  }),
+};
+
+export default { getUserById, create, loginWithEmailAndPassword, verifyEmailByToken };

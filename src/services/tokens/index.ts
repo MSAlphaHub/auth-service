@@ -16,7 +16,7 @@ class TokenService {
    * @param {string} [secret]
    * @returns {string}
    */
-  generateToken = (
+  static generateToken = (
     userId: UUID,
     expires: Moment,
     type: TokenTypes,
@@ -40,7 +40,7 @@ class TokenService {
    * @param {boolean} [blacklisted]
    * @returns {Promise<Token>}
    */
-  saveToken = async (
+  static saveToken = async (
     token: string,
     userId: UUID,
     expires: Moment,
@@ -65,9 +65,10 @@ class TokenService {
    * @returns {Promise<IToken | undefined>} The token document if verification is successful.
    * @throws {Error} If the token is not found.
    */
-  verifyToken = async (token: string): Promise<IToken | undefined> => {
+  static verifyToken = async (token: string): Promise<IToken | undefined> => {
     const payload = jwt.verify(token, config.jwt.secret) as IJwtPayload;
     if (!payload) return;
+    // check token in blacklist
     const tokenDoc = await TokensRepository.getToken(
       token,
       payload.type,
@@ -80,7 +81,10 @@ class TokenService {
     return tokenDoc;
   };
 
-  generateAuthTokens = async (user: IUserAuthToken, trx?: Knex.Transaction) => {
+  static generateAuthTokens = async (
+    user: IUserAuthToken,
+    trx?: Knex.Transaction
+  ) => {
     const accessTokenExpires = moment().add(
       config.jwt.accessExpirationMinutes,
       "minutes"
@@ -119,6 +123,41 @@ class TokenService {
       },
     };
   };
+
+  static generateVerificationToken = async (
+    userId: UUID,
+    trx?: Knex.Transaction
+  ) => {
+    const verifyEmailTokenExpires = moment().add(
+      config.jwt.verifyEmailExpirationMinutes,
+      "minutes"
+    );
+    const verifyEmailToken = this.generateToken(
+      userId,
+      verifyEmailTokenExpires,
+      TokenTypes.VERIFY_EMAIL_TOKEN
+    );
+    await this.saveToken(
+      verifyEmailToken,
+      userId,
+      verifyEmailTokenExpires,
+      TokenTypes.VERIFY_EMAIL_TOKEN,
+      trx
+    );
+    return verifyEmailToken;
+  };
+
+  static checkTokenIsBlacklisted = async (
+    token: string,
+    type: TokenTypes,
+    userId: UUID
+  ) => {
+    return await TokensRepository.checkTokenIsBlacklisted(token, type, userId);
+  };
+
+  static setTokenToBlacklisted = async (token: string, type: TokenTypes) => {
+    return await TokensRepository.setTokenToBlacklisted(token, type);
+  };
 }
 
-export default new TokenService();
+export default TokenService;
