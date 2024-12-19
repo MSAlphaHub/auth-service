@@ -138,3 +138,9 @@ export interface IPayloadVerifyEmail {
   username: string;
   verificationToken: string;
 }
+
+export interface ILoginQRCode {
+  currentSocketID: string;
+  targetSocketID: string;
+  deviceInformation: string;
+}

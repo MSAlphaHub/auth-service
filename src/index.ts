@@ -4,7 +4,12 @@ import config from "./config";
 import logger from "./config/logger";
 import { createExitHandler } from "./utils/errors/handler";
 import rabbitMQ from "./queues"
+import SocketConnection from "./socket"
+
 const server = http.createServer(app);
+
+// INITIAL Socket Connection
+new SocketConnection(server);
 
 const port = config.port;
 server.listen(port, () => {
